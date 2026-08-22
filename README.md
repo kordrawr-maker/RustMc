@@ -69,3 +69,7 @@ Streams server logs to the console. Typed input goes to the server console unles
 - Server types: Vanilla, Paper, Fabric, NeoForge
 - OS: Windows x64, Linux x64/aarch64
 - Java: bundled (Temurin JRE picked automatically per version: 25 for 26.x, 21 for 1.20.5+, 17 for older)
+
+## Where?
+
+- This can be used on home PCs and servers.
