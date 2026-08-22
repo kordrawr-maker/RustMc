@@ -1,0 +1,40 @@
+[package]
+name = "rustmc"
+version = "0.1.0"
+edition = "2021"
+description = "Minimal Minecraft server launcher and manager"
+license = "MIT"
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+ctrlc = "3"
+flate2 = "1"
+hex = "0.4"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "stream", "http2"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha1 = "0.10"
+sha2 = "0.10"
+tar = "0.4"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "time"] }
+zip = "2"
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = [
+    "Win32_Foundation",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_System_ProcessStatus",
+    "Win32_System_SystemInformation",
+    "Win32_System_Threading",
+] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+libc = "0.2"
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+opt-level = 3
