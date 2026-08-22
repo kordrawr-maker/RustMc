@@ -113,7 +113,7 @@ pub async fn run(force: bool, dry_run: bool) -> Result<()> {
     };
     let (jr, jv) = tokio::join!(jre_dl, jar_dl);
     jr?;
-    let jar = jv?;
+    let mut jar = jv?;
 
     println!("[2/3] extracting JRE ...");
     let runtime_dir = server_dir.join("runtime");
@@ -130,7 +130,7 @@ pub async fn run(force: bool, dry_run: bool) -> Result<()> {
         "fabric" => {
             println!("[3/3] running the Fabric installer ...");
             let installer = api::fabric::installer_version(&client).await?;
-            api::fabric::install(&client, &java_path, &server_dir, &mc_version, &extra, &installer)
+            jar = api::fabric::install(&client, &java_path, &server_dir, &mc_version, &extra, &installer)
                 .await?;
         }
         "neoforge" => {

@@ -73,7 +73,7 @@ pub async fn install(
     game: &str,
     loader: &str,
     installer: &str,
-) -> Result<()> {
+) -> Result<String> {
     if !server_dir.join("server.jar").is_file() {
         super::vanilla::download(client, game, server_dir).await?;
     }
@@ -109,5 +109,5 @@ pub async fn install(
     if !server_dir.join("fabric-server-launch.jar").is_file() {
         bail!("fabric install finished but fabric-server-launch.jar is missing");
     }
-    Ok(())
+    Ok("fabric-server-launch.jar".into())
 }
