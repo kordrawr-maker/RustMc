@@ -17,24 +17,46 @@ struct Versions {
 pub async fn all_versions(client: &Client) -> Result<Vec<String>> {
     let v: Versions = serde_json::from_value(net::fetch_json(client, VERSIONS_URL).await?)?;
     let mut out = v.versions;
-    version::sort_desc(&mut out);
+    sort_neoforge_desc(&mut out);
     Ok(out)
 }
 
 pub fn mc_version_of(v: &str) -> Option<String> {
-    let d = version::dots(v)?;
-    if d.len() != 3 {
-        return None;
+    let d = numeric_components(v)?;
+    match d.as_slice() {
+        [major, minor, _build] if *major <= 21 => legacy_mc_version(*major, *minor),
+        [major, minor, _build] => Some(format!("{major}.{minor}")),
+        [major, minor, patch, ..] if *patch == 0 => Some(format!("{major}.{minor}")),
+        [major, minor, patch, ..] => Some(format!("{major}.{minor}.{patch}")),
+        _ => None,
     }
-    Some(if d[0] <= 21 {
-        if d[1] == 0 {
-            format!("1.{}", d[0])
-        } else {
-            format!("1.{}.{}", d[0], d[1])
-        }
+}
+
+fn legacy_mc_version(major: u32, minor: u32) -> Option<String> {
+    Some(if minor == 0 {
+        format!("1.{major}")
     } else {
-        format!("{}.{}", d[0], d[1])
+        format!("1.{major}.{minor}")
     })
+}
+
+fn numeric_components(v: &str) -> Option<Vec<u32>> {
+    let mut out = Vec::new();
+    for part in v.split('.') {
+        let digits = part
+            .chars()
+            .take_while(|c| c.is_ascii_digit())
+            .collect::<String>();
+        if digits.is_empty() {
+            return None;
+        }
+        out.push(digits.parse().ok()?);
+    }
+    if out.is_empty() { None } else { Some(out) }
+}
+
+fn sort_neoforge_desc(v: &mut [String]) {
+    v.sort_by_key(|s| std::cmp::Reverse(numeric_components(s)));
 }
 
 pub fn unique_mc_versions(versions: &[String]) -> Vec<String> {
@@ -104,6 +126,9 @@ mod tests {
         assert_eq!(mc_version_of("20.4.8").as_deref(), Some("1.20.4"));
         assert_eq!(mc_version_of("21.0.23").as_deref(), Some("1.21"));
         assert_eq!(mc_version_of("26.2.7").as_deref(), Some("26.2"));
+        assert_eq!(mc_version_of("26.2.0.62").as_deref(), Some("26.2"));
+        assert_eq!(mc_version_of("26.2.0.17-beta").as_deref(), Some("26.2"));
+        assert_eq!(mc_version_of("26.2.1.4").as_deref(), Some("26.2.1"));
         assert_eq!(mc_version_of("garbage"), None);
     }
 
@@ -113,9 +138,14 @@ mod tests {
             "21.1.115".to_string(),
             "21.1.100".to_string(),
             "20.4.8".to_string(),
+            "26.2.0.62".to_string(),
+            "26.2.0.17-beta".to_string(),
         ];
         let m = filter_for_mc(&all, "1.21.1");
         assert_eq!(m.len(), 2);
         assert!(m.contains(&"21.1.115".to_string()));
+        let m = filter_for_mc(&all, "26.2");
+        assert_eq!(m.len(), 2);
+        assert!(m.contains(&"26.2.0.62".to_string()));
     }
 }
