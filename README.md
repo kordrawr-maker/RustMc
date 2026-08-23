@@ -22,14 +22,14 @@ The binary is `target/release/rustmc` (`rustmc.exe` on Windows). Copy it into an
 ## Quick start
 
 ```
-rustmc setup   # pick a server type and version, answer the prompts
-rustmc run     # start the server, logs stream to this console
+rustmc setup
+rustmc run
 ```
 
-Inside the `rustmc run` console:
+While running "rustmc run"
 
 - `stats` - one snapshot of the server process: uptime, CPU %, RAM (against the configured `-Xmx`), threads, disk read/write
-- `stats live` - the same every 2 seconds; any input stops it
+- `stats live` - the same every 2 seconds any input stops it
 - `stop` - graceful shutdown (Ctrl+C does the same, force-kills after 60s)
 - anything else - forwarded to the server console
 
@@ -39,7 +39,7 @@ Inside the `rustmc run` console:
 rustmc setup
 ```
 
-Prompts for server type (Vanilla, Paper, Fabric, NeoForge), version (fetched live from the official APIs), memory, port and name. Then it downloads a bundled Temurin JRE and the server jar, runs the loader installer for Fabric/NeoForge, writes the EULA, `server.properties` and `server.json`. Everything lives in `server/` next to the binary.
+Prompts for server type (Vanilla, Paper, Fabric, NeoForge), version, memory, port and name. Then it downloads a bundled Temurin JRE and the server jar, runs the loader installer for Fabric/NeoForge, writes the EULA, `server.properties` and `server.json`. Everything lives in `server/` next to the binary.
 
 Flags:
 
