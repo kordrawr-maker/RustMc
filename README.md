@@ -1,7 +1,9 @@
-# RustMc
-
 > [!WARNING]
 > The only website RustMc owns is https://rustmc.vercel.app/ do not download from other sources
+
+![RustMc Icon](https://raw.githubusercontent.com/kordrawr-maker/RustMc/main/Icons/Rustmc.png)
+
+# RustMc
 
 - No hardcoded versions: i wont have to update RustMc for you to use the latest versions on minecraft
 - Lightweight: the program is very lightweight and fast meaning your server can run without interruptions
