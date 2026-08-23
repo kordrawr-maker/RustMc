@@ -16,7 +16,7 @@ cargo build --release
 
 The binary is `target/release/rustmc` (`rustmc.exe` on Windows). Copy it into an empty folder where the server should live and run it from there.
 
-## Quick start
+## Quick start 
 
 ```
 rustmc setup   # pick a server type and version, answer the prompts
