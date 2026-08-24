@@ -1,5 +1,5 @@
 > [!WARNING]
-> The only website RustMc owns is https://rustmc.vercel.app/ do not download from other sources
+> The only website RustMc owns is https://rustmc.xyz do not download from other sources
 
 ![RustMc Icon](https://raw.githubusercontent.com/kordrawr-maker/RustMc/main/Icons/Rustmc.png)
 
